@@ -3,8 +3,6 @@ const db = require('../models');
 const User = db.user;
 const Role = db.role;
 
-require('dotenv').config();
-
 verifyToken = (req, res, next) => {
 	let token = req.session.token;
 

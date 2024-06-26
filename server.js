@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
 	cookieSession({
 		name: 'dan-session',
-		keys: [process.env.COOKIE_SECRET],
+		keys: [process.env.JWT_SECRET],
 		httpOnly: true,
 	})
 );
