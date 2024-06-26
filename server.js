@@ -2,22 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
 
+require('dotenv').config();
+
 const dbConfig = require('./app/config/db.config');
 
 const app = express();
 
 app.use(cors());
 
-// parse requests of content-type - application/json
 app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
 	cookieSession({
 		name: 'bezkoder-session',
-		keys: ['COOKIE_SECRET'], // should use as secret environment variable
+		keys: [process.env.COOKIE_SECRET],
 		httpOnly: true,
 	})
 );
@@ -38,7 +38,7 @@ db.mongoose
 
 // simple route
 app.get('/', (req, res) => {
-	res.json({ message: 'Welcome to bezkoder application.' });
+	res.json({ message: `Welcome to Dan's user authorisation application.` });
 });
 
 // routes
