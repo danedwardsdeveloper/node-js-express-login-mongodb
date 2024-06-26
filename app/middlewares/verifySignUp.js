@@ -1,59 +1,47 @@
-const db = require("../models");
+const db = require('../models');
 const ROLES = db.ROLES;
 const User = db.user;
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
-  // Username
-  User.findOne({
-    username: req.body.username
-  }).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
+const checkDuplicateUsernameOrEmail = async (req, res, next) => {
+	try {
+		let user = await User.findOne({ username: req.body.username }).exec();
+		if (user) {
+			return res
+				.status(400)
+				.send({ message: 'Failed! Username is already in use!' });
+		}
 
-    if (user) {
-      res.status(400).send({ message: "Failed! Username is already in use!" });
-      return;
-    }
+		user = await User.findOne({ email: req.body.email }).exec();
+		if (user) {
+			return res
+				.status(400)
+				.send({ message: 'Failed! Email is already in use!' });
+		}
 
-    // Email
-    User.findOne({
-      email: req.body.email
-    }).exec((err, user) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-
-      if (user) {
-        res.status(400).send({ message: "Failed! Email is already in use!" });
-        return;
-      }
-
-      next();
-    });
-  });
+		next();
+	} catch (err) {
+		res.status(500).send({ message: err });
+	}
 };
 
 checkRolesExisted = (req, res, next) => {
-  if (req.body.roles) {
-    for (let i = 0; i < req.body.roles.length; i++) {
-      if (!ROLES.includes(req.body.roles[i])) {
-        res.status(400).send({
-          message: `Failed! Role ${req.body.roles[i]} does not exist!`
-        });
-        return;
-      }
-    }
-  }
+	if (req.body.roles) {
+		for (let i = 0; i < req.body.roles.length; i++) {
+			if (!ROLES.includes(req.body.roles[i])) {
+				res.status(400).send({
+					message: `Failed! Role ${req.body.roles[i]} does not exist!`,
+				});
+				return;
+			}
+		}
+	}
 
-  next();
+	next();
 };
 
 const verifySignUp = {
-  checkDuplicateUsernameOrEmail,
-  checkRolesExisted
+	checkDuplicateUsernameOrEmail,
+	checkRolesExisted,
 };
 
 module.exports = verifySignUp;
