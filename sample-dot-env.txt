@@ -1,0 +1,9 @@
+NODE_ENV=development
+
+DB_USER=username
+DB_PASS=abcdefg123456789
+DB_CLUSTER=cluster.abc123.mongodb.net
+DB_NAME=DATABASE_NAME
+DB_OPTIONS=retryWrites=true&w=majority&appName=ClusterName
+
+JWT_SECRET=abcdefg12345

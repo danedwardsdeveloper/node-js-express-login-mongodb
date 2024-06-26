@@ -9,11 +9,8 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
-
 app.use(
 	cookieSession({
 		name: 'dan-session',
@@ -25,8 +22,16 @@ app.use(
 const db = require('./app/models');
 const Role = db.role;
 
+const user = process.env.DB_USER;
+const password = process.env.DB_PASS;
+const cluster = process.env.DB_CLUSTER;
+const dbName = process.env.DB_NAME;
+const options = process.env.DB_OPTIONS;
+
+const uri = `mongodb+srv://${user}:${password}@${cluster}/${dbName}?${options}`;
+
 db.mongoose
-	.connect(`${process.env.MONGO_CONNECTION_STRING}`, {})
+	.connect(uri, {})
 	.then(() => {
 		console.log('Successfully connect to MongoDB.');
 		initial();
