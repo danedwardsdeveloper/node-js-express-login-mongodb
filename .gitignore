@@ -1,4 +1,11 @@
-node_modules
+/node_modules
 package-lock.json
-.env
+/build
+.env 
+.env.* 
+.vscode/
+.idea/
+*.log
 .DS_Store
+replacements.txt
+.netlify
