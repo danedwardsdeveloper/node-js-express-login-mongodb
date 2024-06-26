@@ -29,7 +29,8 @@
 		"jsonwebtoken": "^9.0.2",
 		"mongoose": "^8.4.4",
 		"nodemon": "^3.1.4",
-		"npm": "^10.8.1"
+		"npm": "^10.8.1",
+		"serverless-http": "^3.2.0"
 	},
 	"dependencies": {
 		"cookie-session": "^2.1.0"

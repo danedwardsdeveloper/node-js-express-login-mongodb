@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
+const serverless = require('serverless-http');
+const router = express.Router();
 
 require('dotenv').config();
 
@@ -41,10 +43,22 @@ app.get('/', (req, res) => {
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}.`);
-});
+const nodeEnv = process.env.NODE_ENV;
+
+if (nodeEnv === 'development') {
+	const PORT = 8080;
+	app.use('/', router);
+	app.listen(PORT, () => {
+		console.log(`Server running locally on port ${PORT}`);
+	});
+} else if (nodeEnv === 'production') {
+	app.use('/.netlify/functions/server', router);
+	module.exports.handler = serverless(app);
+} else {
+	console.log(
+		`Error: NODE_ENV must be set to either 'development' or 'production'.`
+	);
+}
 
 async function initial() {
 	try {
